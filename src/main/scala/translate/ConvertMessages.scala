@@ -16,19 +16,38 @@ package translate
  * limitations under the License.
  */
 
+import scala.swing._
 object ConvertMessages extends ConvertMessages with App {}
 
-class ConvertMessages extends {
+class UI extends MainFrame {
+  title = "Messages Translation"
+  preferredSize = new Dimension(320, 240)
+  contents = new Label("Contents to go here!")
+}
+
+
+class ConvertMessages {
 
 //  def main(args: Array[String]): Unit = {
+    val ui = new UI
+    ui.visible = true
 
+    var message = "About to create Csv...\n"
 
     //compares messages.en with existingTranslations.csv, to create a new, marked-up out.csv
+    ui.contents = new Label(message)
     val message2csv =  new Message2Csv("out.csv")
     message2csv.messages2csv()
 
+    message += "Csv created...\n"
+    ui.contents = new Label(message)
+
     //creates _messages.cy, from Translations.csv
+    message += "About to create create messages file...\n"
+    ui.contents = new Label(message)
     Csv2Message.csv2Messages("Translations.csv")
+    message += "Messages file created...\n"
+    ui.contents = new Label(message)
 
 //  }
 }
