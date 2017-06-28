@@ -18,9 +18,7 @@ package translate
 
 import util.{CsvReader, FileReader, KeyValueParser, WrappedPrintWriter}
 
-object Message2Csv extends Message2Csv{
-  override val pwFileName = "out.csv"
-}
+object Message2Csv extends Message2Csv{}
 
 trait Message2Csv extends KeyValueParser with FileReader with CsvReader with WrappedPrintWriter{
 
@@ -45,7 +43,7 @@ trait Message2Csv extends KeyValueParser with FileReader with CsvReader with Wra
     val enMap = fetchMessages(englishMessagesFileName)
     val existingTranslations = readFromCsv(csvInputFileName)
 
-    pWprintln(csvHeader)
+
     val csvLines = enMap.map{ enMessage =>
 
       val oExistingTranslation = existingTranslations.find(translation => enMessage._1 == translation._1)
@@ -55,9 +53,8 @@ trait Message2Csv extends KeyValueParser with FileReader with CsvReader with Wra
         checkEnglishMessageChanged(existingTranslation, enMessage)
       } + newLine
     }
-    pWprintln(csvLines.fold("")((key,value) => key + value))
 
-    pWclose()
+    writeFile(csvOutputFileName, csvHeader + newLine + csvLines.fold("")((key,value) => key + value))
   }
 
   private def checkEnglishMessageChanged(translation: translationLine, enMessage: messageLine): String = {

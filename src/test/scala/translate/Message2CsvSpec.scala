@@ -26,15 +26,19 @@ class Message2CsvSpec extends FlatSpec with Matchers {
   val inputMessagesFile = "Messages.en"
 
   trait FakeWrappedPrintWriter extends WrappedPrintWriter {
-    var output:String = ""
-    override def pWprintln(line: String) = {output += line + "\n"}
-    override def pWclose() = {}
+    var output: String = ""
+    //    override def pWprintln(line: String) = {output += line + "\n"}
+    //    override def pWclose() = {}
+
+    override def writeFile(fileName: String, content: String): Unit = {
+      output = content
+    }
   }
 
 
   object FakeMessage2Csv extends Message2Csv with FakeWrappedPrintWriter {
 
-    override val pwFileName = "fakeout.csv"
+//    override val pwFileName = "fakeout.csv"
 
     override def readFromCsv(fileName: String): Map[String, (String, String)] = {
       Map("key 1" -> ("English message 1","Welsh message 1"),
@@ -58,7 +62,7 @@ class Message2CsvSpec extends FlatSpec with Matchers {
                                             "key 1\tEnglish message 1\tWelsh message 1\tEnglish message unchanged\n" +    // Already translated
                                             "key 2\tEnglish updated message 2\t\tMessage changed (previous message was: English message 2 / Welsh message 2)\n" +   // Message changed
                                             "key 3\tEnglish message 3\t\tNo Welsh translation found\n" +                  // Welsh empty in csv
-                                            "key 4\tEnglish message 4\t\tNo Welsh translation found\n\n"                  // New Message
+                                            "key 4\tEnglish message 4\t\tNo Welsh translation found\n"                    // New Message
   }
 }
 

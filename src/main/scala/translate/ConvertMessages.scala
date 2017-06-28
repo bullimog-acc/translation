@@ -36,5 +36,5 @@ class ConvertMessages {
     Message2Csv.messages2csv("messages.en", "existingTranslations.csv", "out.csv")
 
     //creates _messages.cy, from Translations.csv
-    Csv2Message.csv2Messages("Translations.csv")
+    Csv2Message.csv2Messages("Translations.csv", "_messages.cy")
 }
