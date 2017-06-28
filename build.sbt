@@ -11,3 +11,5 @@ lazy val root = (project in file(".")).
     libraryDependencies += scalaTest % Test,
     libraryDependencies += swing % Compile
   )
+
+mainClass in Compile := Some("translate.ConvertMessages")

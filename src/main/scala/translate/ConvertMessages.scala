@@ -28,48 +28,12 @@ class UI extends MainFrame {
 
 class ConvertMessages {
 
-//  def main(args: Array[String]): Unit = {
     val ui = new UI
     ui.visible = true
 
-    var message = "About to create Csv...\n"
-
     //compares messages.en with existingTranslations.csv, to create a new, marked-up out.csv
-    ui.contents = new Label(message)
     val message2csv =  new Message2Csv("out.csv")
-    message2csv.messages2csv()
-
-    message += "Csv created...\n"
-    ui.contents = new Label(message)
 
     //creates _messages.cy, from Translations.csv
-    message += "About to create create messages file...\n"
-    ui.contents = new Label(message)
     Csv2Message.csv2Messages("Translations.csv")
-    message += "Messages file created...\n"
-    ui.contents = new Label(message)
-
-//  }
 }
-
-
-/*
- a. Messages.en is the definitive hand-crafted list of messages in the project, so never auto generated.
- b. csv file is generated from messages.en, plus matched cy content, from tracked csv file (when available).
- c. Is cy line is found in csv?, compare line in csv with line in messages.en. Outcome: [New message / Message changed / Already translated]
- d. Messages.cy is always a straight generation from a csv file. New/Untranslated En messages are ignored (for now).
-
-
- 1. Create application, using Play i18n, with text in Messages file(s)
- 2. Run conversion, to create a csv file, from the Messages file(s)
- 3. Track csv in Git and send file to translators.
- 4. Receive csv back, with translations populated.
- 5. Check this new csv into Git, superseeding the one in step 3.
- 6. Extract the Welsh translations from the file, using this tool.
- 7. Run the Tool against the messages.en. If the newly created csv highlights any changes,
-     then the csv will need to be sent back to translators. The lines which have changed will be marked in the file.
- 8. Send screenshots to translation team, for confirmation.
- */
-
-
-
