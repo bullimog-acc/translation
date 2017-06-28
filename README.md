@@ -22,7 +22,7 @@ The tool may then be used to cross-reference the latest English messages file ag
  
  
 # Notes:
- a. Messages.en is the definitive hand-crafted list of messages in the project, so never auto generated.
- b. csv file is generated from messages.en, plus matched cy content, from tracked csv file (when available).
- c. When generating new csv, if cy line is found in old csv?, compare line in csv with line in messages.en. Outcome: [New message / Message changed / Already translated]
- d. Messages.cy is always a straight generation from a csv file. New/Untranslated En messages are ignored (for now).
+ 1. Messages.en is the definitive hand-crafted list of messages in the project, so never auto generated.
+ 2. csv file is generated from messages.en, plus matched cy content, from tracked csv file (when available).
+ 3. When generating new csv, if cy line is found in old csv?, compare line in csv with line in messages.en. Outcome: [New message / Message changed / Already translated]
+ 4. Messages.cy is always a straight generation from a csv file. New/Untranslated En messages are ignored (for now).
