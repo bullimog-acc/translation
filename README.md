@@ -8,6 +8,15 @@ The tool may then be used to cross-reference the latest English messages file ag
  - an existing, changed message
  - an existing, unchanged message
 
+# Executing
+At the moment, just performs both conversions from hardcoded filenames:
+takes messages.en & existingTranslations.csv, outputs to out.csv
+takes Translations.csv and outputs to _messages.cy
+
+These input files need to be in the project home directory. Plans is to create a UI, so that all files can be specified at runtime.
+
+> sbt run
+
 
 
 # Process
