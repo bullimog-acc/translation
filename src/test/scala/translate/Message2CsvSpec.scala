@@ -25,14 +25,16 @@ class Message2CsvSpec extends FlatSpec with Matchers {
   val inputCsvFile = "existingTranslations.csv"
   val inputMessagesFile = "Messages.en"
 
-  class FakeWrappedPrintWriter(fileName: String) extends WrappedPrintWriter(fileName: String) {
+  trait FakeWrappedPrintWriter extends WrappedPrintWriter {
     var output:String = ""
-    override def println(line: String) = {output += line + "\n"}
-    override def close() = {}
+    override def pWprintln(line: String) = {output += line + "\n"}
+    override def pWclose() = {}
   }
 
 
-  object FakeMessage2Csv extends Message2Csv("fake","fake","fake") {
+  object FakeMessage2Csv extends Message2Csv with FakeWrappedPrintWriter {
+
+    override val pwFileName = "fakeout.csv"
 
     override def readFromCsv(fileName: String): Map[String, (String, String)] = {
       Map("key 1" -> ("English message 1","Welsh message 1"),
@@ -46,30 +48,17 @@ class Message2CsvSpec extends FlatSpec with Matchers {
           ("key 3" -> "English message 3"),
           ("key 4" -> "English message 4"))
     }
-
-
-    override lazy val csvOutputFile = new FakeWrappedPrintWriter("temp")
-  }
-
-
-  "Message2csv" should
-    "read and map the english message file values, separated by an =" in {
-    val result = FakeMessage2Csv.fetchMessages("messages.en")
-    result shouldBe Map("key 1" -> "English message 1",
-                        "key 2" -> "English updated message 2",
-                        "key 3" -> "English message 3",
-                        "key 4" -> "English message 4")
   }
 
 
   "Message2csv" should
   "read the en message file, find message in tracked csv, and write the result into a new csv file " in {
-    val result = FakeMessage2Csv.messages2csv()
-    FakeMessage2Csv.csvOutputFile.output shouldBe "Key\tEnglish\tWelsh\tComments\n" +
+    val result = FakeMessage2Csv.messages2csv("fake","fake","fake")
+    FakeMessage2Csv.output shouldBe "Key\tEnglish\tWelsh\tComments\n" +
                                             "key 1\tEnglish message 1\tWelsh message 1\tEnglish message unchanged\n" +    // Already translated
                                             "key 2\tEnglish updated message 2\t\tMessage changed (previous message was: English message 2 / Welsh message 2)\n" +   // Message changed
-                                            "key 3\tEnglish message 3\t\tNo Welsh translation found\n" +                     // Welsh empty in csv
-                                            "key 4\tEnglish message 4\t\tNo Welsh translation found\n"                    // New Message
+                                            "key 3\tEnglish message 3\t\tNo Welsh translation found\n" +                  // Welsh empty in csv
+                                            "key 4\tEnglish message 4\t\tNo Welsh translation found\n\n"                  // New Message
   }
 }
 

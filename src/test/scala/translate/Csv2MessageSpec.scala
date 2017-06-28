@@ -23,13 +23,13 @@ class Csv2MessageSpec extends FlatSpec with Matchers {
 
   val inputCsvFile = "testCsvFilename"
 
-  class FakeWrappedPrintWriter(fileName: String) extends WrappedPrintWriter(fileName: String) {
+  trait FakeWrappedPrintWriter extends WrappedPrintWriter{
     var output = ""
-    override def println(line: String) = {output += line+"\n"}
-    override def close() = {}
+    override def pWprintln(line: String) = {output += line+"\n"}
+    override def pWclose() = {}
   }
 
-  object testCsv2Message extends Csv2Message{
+  object testCsv2Message extends Csv2Message with FakeWrappedPrintWriter{
 
     override def linesFromFile(fileName: String):Iterator[String] = {
       val line1 = "key 1 \t English 1 \t Welsh 1"
@@ -37,26 +37,25 @@ class Csv2MessageSpec extends FlatSpec with Matchers {
       val line3 = "key 300 \t English 3 \t Welsh 3"
       Iterator(line1, line2, line3)
     }
-
-    override lazy val welshMessages = new FakeWrappedPrintWriter("cy-temp")
   }
 
 
   "translate.Csv2Message" should
     "read and map the csv file values, separated by TABs" in {
       val result = testCsv2Message.readFromCsv("en")
-      result shouldBe Map("key 1" -> ("English 1", "Welsh 1"),
-      "key 2" -> ("English 2", "Welsh 2"),
-      "key 300" -> ("English 3", "Welsh 3"))
+      result shouldBe Map(
+        "key 1" -> ("English 1", "Welsh 1"),
+        "key 2" ->   ("English 2", "Welsh 2"),
+        "key 300" -> ("English 3", "Welsh 3"))
   }
 
 
   "translate.Csv2Message" should
     "write to message files from values in the csv file values" in {
     val result = testCsv2Message.csv2Messages(inputCsvFile)
-    testCsv2Message.welshMessages.output shouldBe "key 1=Welsh 1\n" +
-                                                  "key 2=Welsh 2\n" +
-                                                  "key 300=Welsh 3\n"
+    testCsv2Message.output shouldBe "key 1=Welsh 1\n" +
+                                    "key 2=Welsh 2\n" +
+                                    "key 300=Welsh 3\n"
 
   }
 }

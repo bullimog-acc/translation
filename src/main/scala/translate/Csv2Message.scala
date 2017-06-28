@@ -19,21 +19,21 @@ package translate
 import util.{CsvReader, WrappedPrintWriter}
 
 
-object Csv2Message extends Csv2Message
+object Csv2Message extends Csv2Message{
+  override val pwFileName = "_messages.cy"
+
+}
 
 
-class Csv2Message extends CsvReader{
-
-
-  lazy val welshMessages = new WrappedPrintWriter("_messages.cy")
+class Csv2Message extends CsvReader with WrappedPrintWriter{
 
   def csv2Messages(csvFilename:String):Unit = {
 
     val existingTranslations = readFromCsv(csvFilename)
 
     existingTranslations.map{translation =>
-      welshMessages.println(translation._1 + "="  + translation._2._2)
+      pWprintln(translation._1 + "="  + translation._2._2)
     }
-    welshMessages.close()
+    pWclose()
   }
 }

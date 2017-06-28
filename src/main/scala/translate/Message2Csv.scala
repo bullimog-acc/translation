@@ -18,45 +18,49 @@ package translate
 
 import util.{CsvReader, FileReader, KeyValueParser, WrappedPrintWriter}
 
+object Message2Csv extends Message2Csv{
+  override val pwFileName = "out.csv"
+}
 
-class Message2Csv(englishMessagesFileName: String, csvInputFileName: String, csvOutputFileName: String) extends KeyValueParser with FileReader with CsvReader{
+trait Message2Csv extends KeyValueParser with FileReader with CsvReader with WrappedPrintWriter{
 
   val csvHeader = "Key\tEnglish\tWelsh\tComments"
   val delimiter = "\t"
   val token = "="
   val noWelshFound = "No Welsh translation found"
+  val noEnglishFound = "No English messages found"
   val englishUnchanged = "English message unchanged"
   val englishChanged = "Message changed (previous message was: "
   val separator = " / "
   val englishChangedEnd = ")"
+  val newLine = "\n"
 
   type translationLine = (String,(String, String))
   type messageLine = (String, String)
 
-  lazy val csvOutputFile = new WrappedPrintWriter(csvOutputFileName)
 
-  def messages2csv():Unit = {
+
+  def messages2csv(englishMessagesFileName: String, csvInputFileName: String, csvOutputFileName: String):Unit = {
 
     val enMap = fetchMessages(englishMessagesFileName)
     val existingTranslations = readFromCsv(csvInputFileName)
 
-    csvOutputFile.println(csvHeader)
-    enMap.map{ enMessage =>
+    pWprintln(csvHeader)
+    val csvLines = enMap.map{ enMessage =>
 
       val oExistingTranslation = existingTranslations.find(translation => enMessage._1 == translation._1)
 
-      val output = oExistingTranslation.fold(enMessage._1 + delimiter + enMessage._2 + delimiter + delimiter + noWelshFound)
+      oExistingTranslation.fold(enMessage._1 + delimiter + enMessage._2 + delimiter + delimiter + noWelshFound)
       {existingTranslation =>
         checkEnglishMessageChanged(existingTranslation, enMessage)
-      }
-
-      csvOutputFile.println(output)
+      } + newLine
     }
+    pWprintln(csvLines.fold("")((key,value) => key + value))
 
-    csvOutputFile.close()
+    pWclose()
   }
 
-  def checkEnglishMessageChanged(translation: translationLine, enMessage: messageLine): String = {
+  private def checkEnglishMessageChanged(translation: translationLine, enMessage: messageLine): String = {
     if(translation._2._1 == enMessage._2){
       if(translation._2._2 == ""){
         translation._1 + delimiter + enMessage._2 + delimiter + delimiter + noWelshFound
@@ -73,7 +77,6 @@ class Message2Csv(englishMessagesFileName: String, csvInputFileName: String, csv
 
   def fetchMessages(lang:String):Map[String, String] = {
     val lines = for (line <- linesFromFile(lang)) yield line
-
     lines.flatMap{ line =>
       splitKeyValues(line, token).map(line => line._1 -> line._2._1)
     }.toMap

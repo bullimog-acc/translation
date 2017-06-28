@@ -54,8 +54,9 @@ trait CsvReader extends FileReader with KeyValueParser {
 }
 
 
-class WrappedPrintWriter(fileName: String){
-  lazy val pw = new PrintWriter(fileName)
-  def println(line: String) = {pw.println(line)}
-  def close() = {pw.close()}
+trait WrappedPrintWriter{
+  val pwFileName = "default.out"
+  lazy val pw = new PrintWriter(pwFileName)
+  def pWprintln(line: String) = {pw.println(line)}
+  def pWclose() = {pw.close()}
 }
