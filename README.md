@@ -6,7 +6,7 @@ Once the translations are returned, it will extract the Welsh key/value pairs in
 The tool may then be used to cross-reference the latest English messages file against a translated csv file. It will apply comments agains each line, to indicate:
  - a new, untranslated message
  - an existing, changed message
- - an existing unchanged message
+ - an existing, unchanged message
 
 
 
@@ -18,7 +18,7 @@ The tool may then be used to cross-reference the latest English messages file ag
  5. Check this new csv into Git, superseeding the one in step 3.
  6. Extract the (Welsh) translations from the file, using this tool.
  7. Run the Tool against the messages.en / baselined csv. If the newly created csv highlights any changes,
-     this indicates that new translations are required.
+     this indicates that additional translations are required. I.e. the English file has changed since the last csv file was saved / baselined.
  
  
 # Notes:
