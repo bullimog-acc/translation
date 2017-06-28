@@ -28,11 +28,12 @@ class UI extends MainFrame {
 
 class ConvertMessages {
 
-    val ui = new UI
-    ui.visible = true
+//    val ui = new UI
+//    ui.visible = true
 
     //compares messages.en with existingTranslations.csv, to create a new, marked-up out.csv
-    val message2csv =  new Message2Csv("out.csv")
+    val message2csv =  new Message2Csv("messages.en", "existingTranslations.csv", "out.csv")
+    message2csv.messages2csv()
 
     //creates _messages.cy, from Translations.csv
     Csv2Message.csv2Messages("Translations.csv")

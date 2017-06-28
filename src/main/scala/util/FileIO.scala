@@ -44,7 +44,7 @@ trait FileReader {
 }
 
 
-trait CsvReader extends FileReader with KeyValueParser{
+trait CsvReader extends FileReader with KeyValueParser {
   def readFromCsv(translations:String):Map[String, (String, String)] = {
     val lines = for (line <- linesFromFile(translations)) yield line
      lines.flatMap{ line =>

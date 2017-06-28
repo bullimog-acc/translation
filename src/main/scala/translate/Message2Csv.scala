@@ -19,45 +19,54 @@ package translate
 import util.{CsvReader, FileReader, KeyValueParser, WrappedPrintWriter}
 
 
-class Message2Csv(csvFileName: String) extends KeyValueParser with FileReader with CsvReader{
+class Message2Csv(englishMessagesFileName: String, csvInputFileName: String, csvOutputFileName: String) extends KeyValueParser with FileReader with CsvReader{
+
+  val csvHeader = "Key\tEnglish\tWelsh\tComments"
+  val delimiter = "\t"
+  val token = "="
+  val noWelshFound = "No Welsh translation found"
+  val englishUnchanged = "English message unchanged"
+  val englishChanged = "Message changed (previous message was: "
+  val separator = " / "
+  val englishChangedEnd = ")"
 
   type translationLine = (String,(String, String))
   type messageLine = (String, String)
 
-  lazy val csvFile = new WrappedPrintWriter(csvFileName)
+  lazy val csvOutputFile = new WrappedPrintWriter(csvOutputFileName)
 
   def messages2csv():Unit = {
 
-    val enMap = fetchMessages("messages.en")
-    val existingTranslations = readFromCsv("existingTranslations.csv")
+    val enMap = fetchMessages(englishMessagesFileName)
+    val existingTranslations = readFromCsv(csvInputFileName)
 
-    csvFile.println("Key\tEnglish\tWelsh\tComments")
+    csvOutputFile.println(csvHeader)
     enMap.map{ enMessage =>
 
       val oExistingTranslation = existingTranslations.find(translation => enMessage._1 == translation._1)
 
-      val output = oExistingTranslation.fold(enMessage._1 + "\t" + enMessage._2 + "\t\tNo Welsh Translation Found")
+      val output = oExistingTranslation.fold(enMessage._1 + delimiter + enMessage._2 + delimiter + delimiter + noWelshFound)
       {existingTranslation =>
         checkEnglishMessageChanged(existingTranslation, enMessage)
       }
 
-      csvFile.println(output)
+      csvOutputFile.println(output)
     }
 
-    csvFile.close()
+    csvOutputFile.close()
   }
 
   def checkEnglishMessageChanged(translation: translationLine, enMessage: messageLine): String = {
     if(translation._2._1 == enMessage._2){
       if(translation._2._2 == ""){
-        translation._1 + "\t" + enMessage._2 + "\t\t" + "Welsh Translation Empty" //English changed
+        translation._1 + delimiter + enMessage._2 + delimiter + delimiter + noWelshFound
       }
       else {
-        translation._1 + "\t" + translation._2._1 + "\t" + translation._2._2  + "\tEnglish message unchanged"//English unchanged
+        translation._1 + delimiter + translation._2._1 + delimiter + translation._2._2  + delimiter + englishUnchanged
       }
     }
     else{
-      translation._1 + "\t" + enMessage._2 + "\t\t" + "Message changed (previous message was: "+ translation._2._1+ " / " +translation._2._2 + ")" //English changed
+      translation._1 + "\t" + enMessage._2 + delimiter + delimiter + englishChanged+ translation._2._1+ separator +translation._2._2 + englishChangedEnd
     }
   }
 
@@ -66,7 +75,7 @@ class Message2Csv(csvFileName: String) extends KeyValueParser with FileReader wi
     val lines = for (line <- linesFromFile(lang)) yield line
 
     lines.flatMap{ line =>
-      splitKeyValues(line, "=").map(line => line._1 -> line._2._1)
+      splitKeyValues(line, token).map(line => line._1 -> line._2._1)
     }.toMap
   }
 }

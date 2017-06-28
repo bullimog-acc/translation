@@ -24,6 +24,7 @@ object Csv2Message extends Csv2Message
 
 class Csv2Message extends CsvReader{
 
+
   lazy val welshMessages = new WrappedPrintWriter("_messages.cy")
 
   def csv2Messages(csvFilename:String):Unit = {
