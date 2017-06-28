@@ -26,8 +26,6 @@ class Csv2MessageSpec extends FlatSpec with Matchers {
 
   trait FakeWrappedPrintWriter extends WrappedPrintWriter{
     var output = ""
-//    override def pWprintln(line: String) = {output += line+"\n"}
-//    override def pWclose() = {}
 
     override def writeFile(fileName: String, content: String): Unit = {
       output = content

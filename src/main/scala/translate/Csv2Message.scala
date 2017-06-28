@@ -22,7 +22,7 @@ import util.{CsvReader, WrappedPrintWriter}
 object Csv2Message extends Csv2Message{}
 
 
-class Csv2Message extends CsvReader with WrappedPrintWriter{
+trait Csv2Message extends CsvReader with WrappedPrintWriter{
 
   val newLine = "\n"
   val delimiter = "="

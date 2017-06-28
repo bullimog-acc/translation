@@ -27,8 +27,6 @@ class Message2CsvSpec extends FlatSpec with Matchers {
 
   trait FakeWrappedPrintWriter extends WrappedPrintWriter {
     var output: String = ""
-    //    override def pWprintln(line: String) = {output += line + "\n"}
-    //    override def pWclose() = {}
 
     override def writeFile(fileName: String, content: String): Unit = {
       output = content
@@ -37,8 +35,6 @@ class Message2CsvSpec extends FlatSpec with Matchers {
 
 
   object FakeMessage2Csv extends Message2Csv with FakeWrappedPrintWriter {
-
-//    override val pwFileName = "fakeout.csv"
 
     override def readFromCsv(fileName: String): Map[String, (String, String)] = {
       Map("key 1" -> ("English message 1","Welsh message 1"),
