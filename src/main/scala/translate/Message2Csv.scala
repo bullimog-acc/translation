@@ -1,3 +1,5 @@
+package translate
+
 /*
  * Copyright 2015-2017 HM Revenue & Customs
  *
@@ -14,7 +16,7 @@
  * limitations under the License.
  */
 
-import util.{CsvReader, KeyValueParser, FileReader, WrappedPrintWriter}
+import util.{CsvReader, FileReader, KeyValueParser, WrappedPrintWriter}
 
 
 class Message2Csv(csvFileName: String) extends KeyValueParser with FileReader with CsvReader{

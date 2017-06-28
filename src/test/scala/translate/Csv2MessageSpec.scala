@@ -1,3 +1,5 @@
+package translate
+
 /*
  * Copyright 2015-2017 HM Revenue & Customs
  *
@@ -13,8 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import java.io.PrintWriter
 
 import org.scalatest.{FlatSpec, Matchers}
 import util.WrappedPrintWriter
@@ -42,7 +42,7 @@ class Csv2MessageSpec extends FlatSpec with Matchers {
   }
 
 
-  "Csv2Message" should
+  "translate.Csv2Message" should
     "read and map the csv file values, separated by TABs" in {
       val result = testCsv2Message.readFromCsv("en")
       result shouldBe Map("key 1" -> ("English 1", "Welsh 1"),
@@ -51,7 +51,7 @@ class Csv2MessageSpec extends FlatSpec with Matchers {
   }
 
 
-  "Csv2Message" should
+  "translate.Csv2Message" should
     "write to message files from values in the csv file values" in {
     val result = testCsv2Message.csv2Messages(inputCsvFile)
     testCsv2Message.welshMessages.output shouldBe "key 1=Welsh 1\n" +
