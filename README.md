@@ -1,12 +1,13 @@
 # translation
 
-This tool is intended to make translation of English messages files to other languages (usually Welsh), simpler.
+This tool is intended to make translation of English Play! Fraemwork messages files to other languages (specifically Welsh), simpler.
 On first run, it will extract English messages (key/value pairs) into a csv file, for translation.
-Once the translations are returned, it will extract the Welsh key/value pairs into a messages.cy file.
-The tool may then be used to cross-reference the latest English messages file against a translated csv file. It will apply comments agains each line, to indicate:
- - a new, untranslated message
- - an existing, changed message
- - an existing, unchanged message
+
+Once the translations have been populated and returned, the tool can extract the Welsh key/value pairs into a messages.cy file.
+The tool may then be used to cross-reference the latest English messages file against a translated csv file, to ensure sychnonisation. It will apply comments against each line, to indicate:
+ - a new, untranslated English message
+ - an existing, changed English message
+ - an existing, unchanged English message, which already has a Welsh translation
 
 # Executing
 At the moment, just performs both conversions from hardcoded filenames:
