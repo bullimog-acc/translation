@@ -72,13 +72,13 @@ trait Message2Csv extends KeyValueParser with FileReader with CsvReader with Wra
           case (re, rw, Some(existing)) if existing._2._1 != re && existing._2._2 != rw => outputLine(key, re, rw, "english and welsh changed")
           case (re, rw, Some(existing)) if existing._2._1 != re => outputLine(key, re, rw, "english changed")
           case (re, rw, Some(existing)) if existing._2._2 != rw => outputLine(key, re, rw, "welsh changed")
-          case (re, rw, Some(existing)) => outputLine(key, re, rw, "nothing changed")
+          case (re, rw, Some(existing)) => outputLine(key, re, rw, "unchanged")
         }
         result + newLine
       }
     )
     val unaffectedItems: Map[String, (String, String)] = existingMap.filter(existingItem => !receivedMap.exists(receivedItem => receivedItem._1 == existingItem._1))
-    val existingLinesUnaffected = unaffectedItems.map( xx => outputLine( xx._1, xx._2._1, xx._2._2, "bla" )+ newLine)
+    val existingLinesUnaffected = unaffectedItems.map( xx => outputLine( xx._1, xx._2._1, xx._2._2, "unchanged" )+ newLine)
 
     val ee = receivedLines.fold("")((key, value) => key + value) +
       existingLinesUnaffected.fold("")((key, value) => key + value)
